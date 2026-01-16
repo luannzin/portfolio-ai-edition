@@ -1,6 +1,6 @@
 /**
  * MidLayer — optional mid-depth layer for visual depth.
- * Sits between background and content. Static for now (no parallax).
+ * Lower opacity than background, sits between BG and content.
  */
 
 import Image from "next/image";
@@ -20,8 +20,9 @@ export function MidLayer({ src, className = "" }: MidLayerProps) {
         src={src}
         alt=""
         fill
-        className="object-cover opacity-40"
+        className="object-cover opacity-30"
         sizes="100vw"
+        quality={80}
       />
     </div>
   );
