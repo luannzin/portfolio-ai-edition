@@ -1,6 +1,6 @@
 /**
  * Chapter layout wrapper.
- * Provides consistent structure with optional background layers and vignette.
+ * Provides consistent structure with optional background layers, parallax, and vignette.
  *
  * Z-index layering:
  * - z-0: Background layer
@@ -25,6 +25,7 @@ interface ChapterProps {
   density?: Density;
   contentSize?: ContentSize;
   vignette?: boolean;
+  parallax?: boolean;
   className?: string;
 }
 
@@ -38,6 +39,12 @@ const contentSizeStyles: Record<ContentSize, string> = {
   normal: "max-w-4xl",
 };
 
+// Parallax speeds by layer type
+const PARALLAX_SPEEDS = {
+  bg: 0.1,
+  mid: 0.3,
+} as const;
+
 export function Chapter({
   id,
   children,
@@ -47,6 +54,7 @@ export function Chapter({
   density = "normal",
   contentSize = "normal",
   vignette = false,
+  parallax = false,
   className = "",
 }: ChapterProps) {
   return (
@@ -55,10 +63,23 @@ export function Chapter({
       className={`relative min-h-screen w-full overflow-hidden ${className}`}
     >
       {/* Background layer */}
-      {bgSrc && <BackgroundLayer src={bgSrc} priority={id === "opening"} />}
+      {bgSrc && (
+        <BackgroundLayer
+          src={bgSrc}
+          priority={id === "opening"}
+          parallaxSpeed={PARALLAX_SPEEDS.bg}
+          parallaxEnabled={parallax}
+        />
+      )}
 
       {/* Mid layer */}
-      {midSrc && <MidLayer src={midSrc} />}
+      {midSrc && (
+        <MidLayer
+          src={midSrc}
+          parallaxSpeed={PARALLAX_SPEEDS.mid}
+          parallaxEnabled={parallax}
+        />
+      )}
 
       {/* Vignette overlay for text protection */}
       {vignette && (

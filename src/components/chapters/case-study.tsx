@@ -1,7 +1,7 @@
 /**
  * Case Study chapter — Loopvet Sales Site
  * Long-form content with improved typography for readability.
- * Uses narrow content width and vignette for text protection.
+ * Uses narrow content width, vignette, and parallax.
  */
 
 import { Chapter } from "@/components/layout";
@@ -38,6 +38,7 @@ export function CaseStudy() {
       density="normal"
       contentSize="narrow"
       vignette
+      parallax
     >
       {/* Intro */}
       <header className="mb-16 md:mb-20">

@@ -1,6 +1,6 @@
 /**
  * Stack chapter — "The System"
- * Technology groups. Static in this milestone.
+ * Technology groups. Parallax enabled.
  */
 
 import { Chapter } from "@/components/layout";
@@ -45,6 +45,7 @@ export function Stack() {
       bgSrc={CHAPTER_ASSETS.stack.bg}
       midSrc={CHAPTER_ASSETS.stack.mid}
       density="loose"
+      parallax
     >
       <div className="space-y-10">
         {stackGroups.map((group) => (

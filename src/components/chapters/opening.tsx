@@ -3,7 +3,7 @@
 /**
  * Opening chapter — "What I Build"
  * First impression with orchestrated entrance animation.
- * Only chapter with motion in this milestone.
+ * Parallax enabled on background layers.
  */
 
 import { motion } from "motion/react";
@@ -21,6 +21,7 @@ export function Opening() {
       bgSrc={CHAPTER_ASSETS.opening.bg}
       midSrc={CHAPTER_ASSETS.opening.mid}
       density="loose"
+      parallax
       className="flex items-center justify-center"
     >
       <div className="text-center max-w-3xl mx-auto">

@@ -6,44 +6,44 @@
  *
  * Behavior:
  * - Applies translateY based on scroll position
- * - Automatically disables on mobile (performance)
+ * - Automatically disables on mobile
  * - Automatically disables when prefers-reduced-motion is enabled
- * - Cleans up on unmount
- *
- * Usage:
- *   const ref = useRef<HTMLDivElement>(null);
- *   useParallax(ref, 0.1); // moves at 10% of scroll speed
+ * - Respects explicit enabled flag
+ * - Cleans up on unmount via gsap.context().revert()
  */
 
 import { useEffect, type RefObject } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useHasMounted } from "./use-has-mounted";
 import { useReducedMotion } from "./use-reduced-motion";
 import { useIsMobile } from "./use-is-mobile";
 
-// Register plugin once
+// Register plugin once on client
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
 export function useParallax(
   ref: RefObject<HTMLElement | null>,
-  /** Speed multiplier. 0.1 = moves 1px per 10px scrolled */
-  speed: number
+  /** Speed multiplier. 0.10 = subtle, 0.30 = noticeable */
+  speed: number,
+  /** Explicit enable/disable. Default true. */
+  enabled: boolean = true
 ): void {
+  const hasMounted = useHasMounted();
   const prefersReduced = useReducedMotion();
   const isMobile = useIsMobile();
 
   useEffect(() => {
     const element = ref.current;
 
-    // Bail early if no element or motion should be disabled
-    if (!element || prefersReduced || isMobile) {
+    // Bail early: no element, not mounted, disabled, reduced motion, or mobile
+    if (!element || !hasMounted || !enabled || prefersReduced || isMobile) {
       return;
     }
 
-    // Calculate movement range based on viewport height
-    // Element moves from -offset to +offset as it scrolls through viewport
+    // Movement range based on viewport height and speed
     const offset = window.innerHeight * speed;
 
     const ctx = gsap.context(() => {
@@ -55,15 +55,15 @@ export function useParallax(
           ease: "none",
           scrollTrigger: {
             trigger: element,
-            start: "top bottom", // animation starts when top of element hits bottom of viewport
-            end: "bottom top", // animation ends when bottom of element hits top of viewport
-            scrub: true, // ties animation progress to scroll position
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
           },
         }
       );
     });
 
-    // Cleanup on unmount or when dependencies change
+    // Cleanup: revert context kills all animations and ScrollTriggers
     return () => ctx.revert();
-  }, [ref, speed, prefersReduced, isMobile]);
+  }, [ref, speed, enabled, hasMounted, prefersReduced, isMobile]);
 }
