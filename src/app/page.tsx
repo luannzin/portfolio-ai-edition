@@ -1,7 +1,26 @@
+/**
+ * Main page — assembles all chapters in order.
+ * Single-page scroll experience.
+ */
+
+import {
+  Opening,
+  Approach,
+  Stack,
+  SelectedWork,
+  CaseStudy,
+  Contact,
+} from "@/components/chapters";
+
 export default function Home() {
   return (
     <main>
-      <div>Hello world!</div>
+      <Opening />
+      <Approach />
+      <Stack />
+      <SelectedWork />
+      <CaseStudy />
+      <Contact />
     </main>
   );
 }
