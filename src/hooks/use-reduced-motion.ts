@@ -2,8 +2,8 @@
 
 /**
  * Hook to detect prefers-reduced-motion preference.
- * Returns true if user prefers reduced motion.
- * Used to disable parallax and convert animations to opacity-only.
+ * Returns true if user prefers reduced motion, false otherwise.
+ * Returns false on server (no assumption either way — motion handled by useHasMounted).
  */
 
 import { useState, useEffect } from "react";
@@ -11,12 +11,11 @@ import { useState, useEffect } from "react";
 const QUERY = "(prefers-reduced-motion: reduce)";
 
 export function useReducedMotion(): boolean {
-  // Default to true (reduced motion) on server to be safe
-  const [prefersReduced, setPrefersReduced] = useState(true);
+  // Start with false — actual preference detected on mount
+  const [prefersReduced, setPrefersReduced] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia(QUERY);
-    // Set initial value on client
     setPrefersReduced(mediaQuery.matches);
 
     const handler = (event: MediaQueryListEvent) => {

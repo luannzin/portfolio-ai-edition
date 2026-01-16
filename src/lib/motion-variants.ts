@@ -1,7 +1,7 @@
 /**
  * Motion variants for Framer Motion.
- * Two patterns only: Fade Rise (singles) and Stagger Cascade (groups).
- * All variants automatically respect prefers-reduced-motion via the hook.
+ * Two patterns only: fadeRise (singles) and staggerCascade (container + item).
+ * Reduced motion variants remove transforms, keeping opacity only.
  */
 
 import type { Variants } from "motion/react";
@@ -9,7 +9,7 @@ import { TIMING, EASING, TRANSFORM } from "./constants";
 
 /**
  * Fade Rise — for single elements.
- * Fades in while rising 16px. Used for headings, hero text, standalone blocks.
+ * Fades in while rising 16px.
  */
 export const fadeRise: Variants = {
   hidden: {
@@ -28,13 +28,10 @@ export const fadeRise: Variants = {
 };
 
 /**
- * Fade Rise (reduced motion) — opacity only, no transform.
- * Used when prefers-reduced-motion is enabled.
+ * Fade Rise (reduced motion) — opacity only.
  */
 export const fadeRiseReduced: Variants = {
-  hidden: {
-    opacity: 0,
-  },
+  hidden: { opacity: 0 },
   visible: (delay: number = 0) => ({
     opacity: 1,
     transition: {
@@ -46,22 +43,19 @@ export const fadeRiseReduced: Variants = {
 };
 
 /**
- * Stagger Cascade container — for groups of items.
- * The container triggers children to animate in sequence.
+ * Stagger container — orchestrates children.
  */
 export const staggerContainer: Variants = {
   hidden: {},
   visible: {
     transition: {
       staggerChildren: TIMING.stagger,
-      delayChildren: 0,
     },
   },
 };
 
 /**
- * Stagger Cascade item — each child in a staggered group.
- * Uses Fade Rise motion but timing is controlled by parent.
+ * Stagger item — child of stagger container.
  */
 export const staggerItem: Variants = {
   hidden: {
@@ -79,12 +73,10 @@ export const staggerItem: Variants = {
 };
 
 /**
- * Stagger Cascade item (reduced motion) — opacity only.
+ * Stagger item (reduced motion) — opacity only.
  */
 export const staggerItemReduced: Variants = {
-  hidden: {
-    opacity: 0,
-  },
+  hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {

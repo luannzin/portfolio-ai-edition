@@ -5,8 +5,16 @@
  * Technology groups with staggered reveal.
  */
 
+import { motion } from "motion/react";
 import { Chapter } from "@/components/layout";
-import { FadeIn, StaggerList, StaggerItem } from "@/components/motion";
+import { useHasMounted, useReducedMotion } from "@/hooks";
+import {
+  fadeRise,
+  fadeRiseReduced,
+  staggerContainer,
+  staggerItem,
+  staggerItemReduced,
+} from "@/lib/motion-variants";
 
 const stackGroups = [
   {
@@ -41,33 +49,50 @@ const stackGroups = [
 ];
 
 export function Stack() {
+  const hasMounted = useHasMounted();
+  const prefersReduced = useReducedMotion();
+  const variants = prefersReduced ? fadeRiseReduced : fadeRise;
+  const itemVariants = prefersReduced ? staggerItemReduced : staggerItem;
+
   return (
     <Chapter id="stack" className="flex items-center justify-center py-32">
       <div className="max-w-3xl px-6">
-        <FadeIn>
-          <h2 className="text-2xl md:text-3xl font-medium text-white mb-16">
-            Stack
-          </h2>
-        </FadeIn>
+        <motion.h2
+          variants={variants}
+          initial={hasMounted ? "hidden" : false}
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          className="text-2xl md:text-3xl font-medium text-white mb-16"
+        >
+          Stack
+        </motion.h2>
 
-        <StaggerList className="space-y-10">
+        <motion.div
+          variants={staggerContainer}
+          initial={hasMounted ? "hidden" : false}
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          className="space-y-10"
+        >
           {stackGroups.map((group) => (
-            <StaggerItem key={group.name}>
-              <article>
-                <h3 className="text-lg font-medium text-white">{group.name}</h3>
-                <p className="mt-1 text-white/50 text-sm">{group.tools}</p>
-                <p className="mt-2 text-white/70">{group.reason}</p>
-              </article>
-            </StaggerItem>
+            <motion.article key={group.name} variants={itemVariants}>
+              <h3 className="text-lg font-medium text-white">{group.name}</h3>
+              <p className="mt-1 text-white/50 text-sm">{group.tools}</p>
+              <p className="mt-2 text-white/70">{group.reason}</p>
+            </motion.article>
           ))}
-        </StaggerList>
+        </motion.div>
 
-        <FadeIn>
-          <p className="mt-16 text-sm text-white/40 italic">
-            I avoid heavy abstractions that promise flexibility but add
-            indirection. I prefer boring, readable code.
-          </p>
-        </FadeIn>
+        <motion.p
+          variants={variants}
+          initial={hasMounted ? "hidden" : false}
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          className="mt-16 text-sm text-white/40 italic"
+        >
+          I avoid heavy abstractions that promise flexibility but add
+          indirection. I prefer boring, readable code.
+        </motion.p>
       </div>
     </Chapter>
   );
