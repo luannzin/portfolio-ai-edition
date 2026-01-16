@@ -1,50 +1,27 @@
-"use client";
-
 /**
- * Background layer component.
- * Renders an absolutely positioned image meant for parallax depth.
- *
- * Responsibilities:
- * - Always behind content (z-10)
- * - Consumes full viewport with cover fit
- * - Pointer events disabled (click-through)
- * - Parallax applied via useParallax hook
+ * BackgroundLayer — renders a full-bleed background image.
+ * Covers entire chapter area, fades at edges, no pointer events.
  */
 
-import { useRef } from "react";
 import Image from "next/image";
-import { useParallax } from "@/hooks";
-import { PARALLAX } from "@/lib/constants";
 
 interface BackgroundLayerProps {
-  /** Path to image in /public */
   src: string;
-  /** Alt text for accessibility */
-  alt: string;
-  /** Optional custom parallax speed. Default: PARALLAX.background (0.1) */
-  speed?: number;
+  className?: string;
 }
 
-export function BackgroundLayer({
-  src,
-  alt,
-  speed = PARALLAX.background,
-}: BackgroundLayerProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  useParallax(ref, speed);
-
+export function BackgroundLayer({ src, className = "" }: BackgroundLayerProps) {
   return (
     <div
-      ref={ref}
-      className="absolute inset-0 z-10 pointer-events-none overflow-hidden"
+      className={`absolute inset-0 z-0 pointer-events-none overflow-hidden ${className}`}
       aria-hidden="true"
     >
       <Image
         src={src}
-        alt={alt}
+        alt=""
         fill
         priority
-        className="object-cover"
+        className="object-cover opacity-60"
         sizes="100vw"
       />
     </div>

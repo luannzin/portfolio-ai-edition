@@ -2,52 +2,58 @@
 
 /**
  * Opening chapter — "What I Build"
- * First impression. Orchestrated entrance on page load.
+ * First impression with orchestrated entrance animation.
+ * Only chapter with motion in this milestone.
  */
 
 import { motion } from "motion/react";
 import { Chapter } from "@/components/layout";
-import { useHasMounted, useReducedMotion } from "@/hooks";
-import { fadeRise, fadeRiseReduced } from "@/lib/motion-variants";
+import { CHAPTER_ASSETS } from "@/lib/assets";
+import { useHasMounted } from "@/hooks";
+import { fadeRise } from "@/lib/motion-variants";
 
 export function Opening() {
   const hasMounted = useHasMounted();
-  const prefersReduced = useReducedMotion();
-  const variants = prefersReduced ? fadeRiseReduced : fadeRise;
 
   return (
-    <Chapter id="opening" className="flex items-center justify-center">
-      <div className="max-w-4xl px-6 text-center">
-        {/* Focus statement — first to appear */}
+    <Chapter
+      id="opening"
+      bgSrc={CHAPTER_ASSETS.opening.bg}
+      midSrc={CHAPTER_ASSETS.opening.mid}
+      density="loose"
+      className="flex items-center justify-center"
+    >
+      <div className="text-center max-w-3xl mx-auto">
+        {/* Headline */}
         <motion.h1
-          variants={variants}
+          variants={fadeRise}
           initial={hasMounted ? "hidden" : false}
           animate={hasMounted ? "visible" : false}
-          custom={0.6}
-          className="text-4xl md:text-6xl font-medium text-white tracking-tight"
+          custom={0.4}
+          className="text-4xl md:text-6xl lg:text-7xl font-medium text-white tracking-tight leading-tight"
         >
           I build fast, reliable interfaces for products people depend on.
         </motion.h1>
 
-        {/* Supporting line — appears after headline */}
+        {/* Supporting line */}
         <motion.p
-          variants={variants}
+          variants={fadeRise}
           initial={hasMounted ? "hidden" : false}
           animate={hasMounted ? "visible" : false}
-          custom={0.8}
-          className="mt-6 text-lg md:text-xl text-white/70"
+          custom={0.7}
+          className="mt-8 text-lg md:text-xl text-white/70 max-w-2xl mx-auto"
         >
           Frontend engineer focused on performance, maintainability, and
           shipping real value—not just features.
         </motion.p>
 
-        {/* Scroll cue — appears last */}
+        {/* Scroll cue */}
         <motion.p
-          variants={variants}
+          variants={fadeRise}
           initial={hasMounted ? "hidden" : false}
           animate={hasMounted ? "visible" : false}
-          custom={1.2}
-          className="mt-16 text-sm text-white/40"
+          custom={1.0}
+          className="mt-20 text-sm text-white/40"
         >
           See how I work
         </motion.p>

@@ -2,22 +2,16 @@
 
 /**
  * Contact chapter — "Get in Touch"
- * Minimal closing with email CTA.
+ * Email CTA and social links.
  */
 
 import { useState } from "react";
-import { motion } from "motion/react";
 import { Chapter } from "@/components/layout";
-import { useHasMounted, useReducedMotion } from "@/hooks";
-import { fadeRise, fadeRiseReduced } from "@/lib/motion-variants";
+import { CHAPTER_ASSETS } from "@/lib/assets";
 
 export function Contact() {
   const [copied, setCopied] = useState(false);
   const email = "luandaniel966@gmail.com";
-
-  const hasMounted = useHasMounted();
-  const prefersReduced = useReducedMotion();
-  const variants = prefersReduced ? fadeRiseReduced : fadeRise;
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(email);
@@ -28,16 +22,11 @@ export function Contact() {
   return (
     <Chapter
       id="contact"
-      className="flex items-center justify-center py-32"
-      minHeight="min-h-[70vh]"
+      bgSrc={CHAPTER_ASSETS.contact.bg}
+      density="loose"
+      className="flex items-center justify-center"
     >
-      <motion.div
-        variants={variants}
-        initial={hasMounted ? "hidden" : false}
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        className="max-w-xl px-6 text-center"
-      >
+      <div className="text-center max-w-xl mx-auto">
         <p className="text-white/70 mb-8">
           I'm open to senior frontend roles at product-driven teams.
         </p>
@@ -71,7 +60,7 @@ export function Contact() {
         <p className="mt-16 text-xs text-white/30">
           Based in Brazil (UTC-3). I typically respond within 24 hours.
         </p>
-      </motion.div>
+      </div>
     </Chapter>
   );
 }
